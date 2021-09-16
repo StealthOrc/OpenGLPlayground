@@ -1,3 +1,15 @@
+# Directories
+.vs/
+x64/
+OpenGLPlayground/x64/
+OpenGLPlayground/deps/*
+
+#Files
+*.user
+*.filters
+*.vcxproj
+*.sln
+
 # Prerequisites
 *.d
 
