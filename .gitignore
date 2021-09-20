@@ -7,8 +7,6 @@ OpenGLPlayground/deps/*
 #Files
 *.user
 *.filters
-*.vcxproj
-*.sln
 
 # Prerequisites
 *.d
