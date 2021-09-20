@@ -1,5 +1,6 @@
 #include "VertexArray.h"
 
+#include "VertexBufferLayout.h"
 #include "Renderer.h"
 
 VertexArray::VertexArray()
@@ -12,6 +13,8 @@ VertexArray::~VertexArray()
     GLCall(glDeleteVertexArrays(1, &m_RendererID));
 }
 
+//disable warning: unsigned int to const void* cast
+#pragma warning disable C4312
 void VertexArray::AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout)
 {
     Bind();
@@ -26,6 +29,7 @@ void VertexArray::AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& la
         offset += element.count * VertexBufferElement::GetSizeOfType(element.type);
     }
 }
+#pragma warning restore C4312
 
 void VertexArray::Bind() const
 {
