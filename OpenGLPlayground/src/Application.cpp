@@ -12,6 +12,7 @@
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "Shader.h"
+#include "Texture.h"
 
 int main(void)
 {
@@ -26,7 +27,7 @@ int main(void)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(600, 480, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(900, 900, "Hello World", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -51,25 +52,25 @@ int main(void)
     //ib calls open gl error since context gets terminated before the indexbuffer does. Shouldnt happen usually
     {
         float positions[] = {
-            -0.5f, -0.5f, //0
-             0.5f, -0.5f, //1
-             0.5f,  0.5f, //2
-            -0.5f,  0.5f  //3
+            -0.5f, -0.5f, 0.0f, 0.0f,//0
+             0.5f, -0.5f, 1.0f, 0.0f,//1
+             0.5f,  0.5f, 1.0f, 1.0f,//2
+            -0.5f,  0.5f, 0.0f, 1.0f,//3
         };
 
         unsigned int indices[] = {
             0, 1, 2,
             2, 3, 0
         };
-
-        unsigned int vao;
-        GLCall(glGenVertexArrays(1, &vao));
-        GLCall(glBindVertexArray(vao));
+        //enable blend with functions
+        GLCall(glEnable(GL_BLEND));
+        GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
         VertexArray va;        
-        VertexBuffer vb(positions, 4 * 2 * sizeof(float));
+        VertexBuffer vb(positions, 4 * 4 * sizeof(float));
 
         VertexBufferLayout layout;
+        layout.Push<float>(2);
         layout.Push<float>(2);
         va.AddBuffer(vb, layout);
 
@@ -77,8 +78,15 @@ int main(void)
 
         Shader shader("res/shaders/Basic.shader");
         shader.Bind();
-        shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
+        //shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
 
+        Texture texture("res/textures/02.png");
+
+        unsigned int texID = 0;
+        texture.Bind(texID);
+        shader.SetUniform1i("u_Texture", texID);
+
+        //texture.Unbind();
         va.Unbind();
         vb.Unbind();
         ib.Unbind();
@@ -95,7 +103,7 @@ int main(void)
             renderer.Clear();
             
             shader.Bind();
-            shader.SetUniform4f("u_Color", r, 0.3f, 0.8f, 1.0f);
+            //shader.SetUniform4f("u_Color", r, 0.3f, 0.8f, 1.0f);
 
             renderer.Draw(va, ib, shader);
 

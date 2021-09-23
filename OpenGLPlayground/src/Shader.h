@@ -23,7 +23,8 @@ public:
 	void Unbind() const;
 
 	//set uniforms
-	void SetUniform4f(const std::string& name, float f0, float f1, float f2, float f3);
+	void SetUniform1i(const std::string& name, int v0);
+		void SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3);
 private:
 	unsigned int GetUniformLocation(const std::string& name);
 	unsigned int CompileShader(unsigned int type, const std::string& source);
